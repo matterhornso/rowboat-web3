@@ -1,31 +1,22 @@
 import { z } from "zod";
-import { auth0 } from "./auth0";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { User } from "@/src/entities/models/user";
 import { USE_AUTH } from "./feature_flags";
 import { redirect } from "next/navigation";
 import { container } from "@/di/container";
 import { IUsersRepository } from "@/src/application/repositories/users.repository.interface";
 
-export const GUEST_SESSION = {
-    email: "guest@rowboatlabs.com",
-    email_verified: true,
-    sub: "guest_user",
-}
-
 export const GUEST_DB_USER: z.infer<typeof User> = {
     id: "guest_user",
-    auth0Id: "guest_user",
+    clerkId: "guest_user",
     name: "Guest",
-    email: "guest@rowboatlabs.com",
+    email: "guest@autonomous.com",
     createdAt: new Date().toISOString(),
 }
 
 /**
- * This function should be used as an initial check in server page components to ensure
- * the user is authenticated. It will:
- * 1. Check for a valid user session
- * 2. Redirect to login if no session exists
- * 3. Return the authenticated user
+ * Ensures the user is authenticated. Redirects to sign-in if not.
+ * Returns the db User record, creating one on first login.
  *
  * Usage in server components:
  * ```ts
@@ -37,32 +28,31 @@ export async function requireAuth(): Promise<z.infer<typeof User>> {
         return GUEST_DB_USER;
     }
 
-    const { user } = await auth0.getSession() || {};
-    if (!user) {
-        redirect('/auth/login');
+    const { userId } = await auth();
+    if (!userId) {
+        redirect('/sign-in');
     }
 
-    // fetch db user
     const usersRepository = container.resolve<IUsersRepository>("usersRepository");
-    let dbUser = await getUserFromSessionId(user.sub);
+    let dbUser = await getUserFromSessionId(userId);
 
-    // if db user does not exist, create one
     if (!dbUser) {
+        const clerkUser = await currentUser();
         dbUser = await usersRepository.create({
-            auth0Id: user.sub,
-            email: user.email,
+            clerkId: userId,
+            email: clerkUser?.emailAddresses?.[0]?.emailAddress,
         });
-        console.log(`created new user id ${dbUser.id} for session id ${user.sub}`);
+        console.log(`created new user id ${dbUser.id} for clerk id ${userId}`);
     }
 
     return dbUser;
 }
 
-export async function getUserFromSessionId(sessionUserId: string): Promise<z.infer<typeof User> | null> {
+export async function getUserFromSessionId(clerkUserId: string): Promise<z.infer<typeof User> | null> {
     if (!USE_AUTH) {
         return GUEST_DB_USER;
     }
 
     const usersRepository = container.resolve<IUsersRepository>("usersRepository");
-    return await usersRepository.fetchByAuth0Id(sessionUserId);
+    return await usersRepository.fetchByClerkId(clerkUserId);
 }

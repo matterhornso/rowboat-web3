@@ -1,44 +1,40 @@
 'use client';
-import Image from 'next/image';
-import logo from "@/public/logo.png";
-import { useUser } from "@auth0/nextjs-auth0";
+import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@heroui/react";
+import { useEffect } from "react";
 
 export function App() {
     const router = useRouter();
-    const { user, isLoading } = useUser();
+    const { user, isLoaded } = useUser();
 
-    if (user) {
-        router.push("/projects");
-    }
-
-    // Add auto-redirect for non-authenticated users
-    if (!isLoading && !user) {
-        router.push("/auth/login");
-    }
+    useEffect(() => {
+        if (!isLoaded) return;
+        if (user) {
+            router.push("/projects");
+        } else {
+            router.push("/sign-in");
+        }
+    }, [user, isLoaded, router]);
 
     return (
-        <div className="min-h-screen w-full bg-[url('/landing-bg.jpg')] bg-cover bg-center flex flex-col items-center justify-between py-10">
-            {/* Main content box */}
+        <div className="min-h-screen w-full bg-[#0A0A0B] flex flex-col items-center justify-between py-10">
             <div className="flex-1 flex items-center justify-center">
-                <div className="bg-white/70 backdrop-blur-sm rounded-xl p-10 flex flex-col items-center gap-8 shadow-lg">
-                    <Image
-                        src={logo}
-                        alt="RowBoat Logo"
-                        height={40}
-                    />
-                    {(isLoading || !user) && <Spinner size="sm" />}
-                    {user && <div className="flex items-center gap-2">
-                        <Spinner size="sm" />
-                        <div className="text-sm text-gray-400">Welcome, {user.name}</div>
-                    </div>}
+                <div className="flex flex-col items-center gap-6">
+                    <div className="font-[--font-instrument-serif] text-3xl text-[#FAFAF8]">
+                        Autonomous Memory
+                    </div>
+                    <Spinner size="sm" color="warning" />
+                    {isLoaded && user && (
+                        <div className="text-sm text-neutral-400">
+                            Welcome back, {user.firstName ?? user.primaryEmailAddress?.emailAddress}
+                        </div>
+                    )}
                 </div>
             </div>
 
-            {/* Footer */}
-            <div className="flex flex-col items-center gap-2 text-xs text-white/70">
-                <div>&copy; 2025 RowBoat Labs</div>
+            <div className="text-xs text-neutral-600">
+                &copy; 2025 The Autonomous Org
             </div>
         </div>
     );

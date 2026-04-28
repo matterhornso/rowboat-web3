@@ -1,5 +1,5 @@
 "use server";
-import { auth0 } from "../lib/auth0";
+import { auth } from "@clerk/nextjs/server";
 import { USE_AUTH } from "../lib/feature_flags";
 import { User } from "@/src/entities/models/user";
 import { getUserFromSessionId, GUEST_DB_USER } from "../lib/auth";
@@ -14,12 +14,12 @@ export async function authCheck(): Promise<z.infer<typeof User>> {
         return GUEST_DB_USER;
     }
 
-    const { user } = await auth0.getSession() || {};
-    if (!user) {
+    const { userId } = await auth();
+    if (!userId) {
         throw new Error('User not authenticated');
     }
 
-    const dbUser = await getUserFromSessionId(user.sub);
+    const dbUser = await getUserFromSessionId(userId);
     if (!dbUser) {
         throw new Error('User record not found');
     }
@@ -43,6 +43,5 @@ export async function updateUserEmail(email: string) {
         throw new Error('Invalid email');
     }
 
-    // update customer email in db
     await usersRepository.updateEmail(user.id, email);
 }

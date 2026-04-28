@@ -1,27 +1,30 @@
 'use client';
-import { useUser } from '@auth0/nextjs-auth0';
+import { useUser, useClerk } from '@clerk/nextjs';
 import { Avatar, Dropdown, DropdownItem, DropdownSection, DropdownTrigger, DropdownMenu } from "@heroui/react";
 import { useRouter } from 'next/navigation';
 
 export function UserButton({ useBilling, collapsed }: { useBilling?: boolean, collapsed?: boolean }) {
     const router = useRouter();
     const { user } = useUser();
+    const { signOut } = useClerk();
+
     if (!user) {
         return <></>;
     }
 
-    const title = user.email ?? user.name ?? 'Unknown user';
-    const name = user.name ?? user.email ?? 'Unknown user';
+    const email = user.primaryEmailAddress?.emailAddress ?? '';
+    const name = user.fullName ?? email ?? 'Unknown user';
 
     return <Dropdown>
         <DropdownTrigger>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 cursor-pointer">
                 <Avatar
                     name={name}
                     size='md'
                     isBordered
                     radius='md'
                     className='shrink-0'
+                    src={user.imageUrl}
                 />
                 {!collapsed && <span className="text-sm truncate">{name}</span>}
             </div>
@@ -29,14 +32,14 @@ export function UserButton({ useBilling, collapsed }: { useBilling?: boolean, co
         <DropdownMenu
             onAction={(key) => {
                 if (key === 'logout') {
-                    router.push('/auth/logout');
+                    signOut(() => router.push('/'));
                 }
                 if (key === 'billing') {
                     router.push('/billing');
                 }
             }}
         >
-            <DropdownSection title={title}>
+            <DropdownSection title={email}>
                 {useBilling ? (
                     <DropdownItem key="billing">
                         Billing

@@ -5,7 +5,7 @@ import { Button as CustomButton } from "@/components/ui/button";
 import { RadioIcon, RedoIcon, UndoIcon, RocketIcon, PenLine, AlertTriangle, DownloadIcon, SettingsIcon, ChevronDownIcon, ZapIcon, Clock, Plug, MessageCircleIcon, ShareIcon } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { ProgressBar, ProgressStep } from "@/components/ui/progress-bar";
-import { useUser } from '@auth0/nextjs-auth0';
+import { useUser } from '@clerk/nextjs';
 import { useState, useEffect } from "react";
 import { SHOW_COMMUNITY_PUBLISH } from "@/app/lib/feature_flags";
 
@@ -142,7 +142,7 @@ export function TopBar({
     
     const getUserDisplayName = () => {
         if (!user) return 'Anonymous';
-        return user.name ?? user.email ?? 'Anonymous';
+        return user.fullName ?? user.primaryEmailAddress?.emailAddress ?? 'Anonymous';
     };
     
     // Progress bar steps with completion logic and current step detection

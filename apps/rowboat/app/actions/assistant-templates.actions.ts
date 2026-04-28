@@ -167,14 +167,14 @@ export async function createAssistantTemplate(data: z.infer<typeof CreateTemplat
     
     if (USE_AUTH) {
         try {
-            const { auth0 } = await import('@/app/lib/auth0');
-            const { user: auth0User } = await auth0.getSession() || {};
-            if (auth0User) {
-                authorName = auth0User.name ?? auth0User.email ?? 'Anonymous';
-                authorEmail = auth0User.email;
+            const { currentUser } = await import('@clerk/nextjs/server');
+            const clerkUser = await currentUser();
+            if (clerkUser) {
+                authorName = clerkUser.fullName ?? clerkUser.emailAddresses?.[0]?.emailAddress ?? 'Anonymous';
+                authorEmail = clerkUser.emailAddresses?.[0]?.emailAddress;
             }
         } catch (error) {
-            console.warn('Could not get Auth0 user info:', error);
+            console.warn('Could not get Clerk user info:', error);
         }
     }
 
