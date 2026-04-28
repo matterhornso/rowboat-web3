@@ -1,7 +1,7 @@
 {
-    "name": "rowboat",
-    "productName": "Rowboat",
-    "description": "AI coworker with memory",
+    "name": "autonomous-memory-desktop",
+    "productName": "Autonomous Memory",
+    "description": "Executive memory for CEOs, CROs, and founders. Never forget a conversation.",
     "type": "module",
     "version": "0.1.0",
     "main": ".package/dist/main.cjs",

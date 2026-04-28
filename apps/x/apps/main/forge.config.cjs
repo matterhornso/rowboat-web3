@@ -7,12 +7,12 @@ const pkg = require('./package.json');
 
 module.exports = {
     packagerConfig: {
-        executableName: 'rowboat',
+        executableName: 'autonomous-memory',
         icon: './icons/icon',  // .icns extension added automatically
-        appBundleId: 'com.rowboat.app',
+        appBundleId: 'org.theautonomous.memory',
         appCategoryType: 'public.app-category.productivity',
         extendInfo: {
-            NSAudioCaptureUsageDescription: 'Rowboat needs access to system audio to transcribe meetings from other apps (Zoom, Meet, etc.)',
+            NSAudioCaptureUsageDescription: 'Autonomous Memory needs access to system audio to transcribe meetings from other apps (Zoom, Meet, etc.)',
         },
         osxSign: {
             batchCodesignCalls: true,
@@ -43,27 +43,27 @@ module.exports = {
             name: '@electron-forge/maker-dmg',
             config: (arch) => ({
                 format: 'ULFO',
-                name: `Rowboat-darwin-${arch}-${pkg.version}`,  // Architecture-specific name to avoid conflicts
+                name: `AutonomousMemory-darwin-${arch}-${pkg.version}`,
             })
         },
         {
             name: '@electron-forge/maker-squirrel',
             config: (arch) => ({
-                authors: 'rowboatlabs',
-                description: 'AI coworker with memory',
-                name: `Rowboat-win32-${arch}`,
-                setupExe: `Rowboat-win32-${arch}-${pkg.version}-setup.exe`,
+                authors: 'The Autonomous Org',
+                description: 'Executive memory for CEOs, CROs, and founders. Never forget a conversation.',
+                name: `AutonomousMemory-win32-${arch}`,
+                setupExe: `AutonomousMemory-win32-${arch}-${pkg.version}-setup.exe`,
             })
         },
         {
             name: '@electron-forge/maker-deb',
             config: (arch) => ({
                 options: {
-                    name: `Rowboat-linux`,
-                    bin: "rowboat",
-                    description: 'AI coworker with memory',
-                    maintainer: 'rowboatlabs',
-                    homepage: 'https://rowboatlabs.com'
+                    name: `AutonomousMemory-linux`,
+                    bin: "autonomous-memory",
+                    description: 'Executive memory for CEOs, CROs, and founders. Never forget a conversation.',
+                    maintainer: 'The Autonomous Org',
+                    homepage: 'https://theautonomous.org/memory'
                 }
             })
         },
@@ -71,10 +71,10 @@ module.exports = {
             name: '@electron-forge/maker-rpm',
             config: {
                 options: {
-                    name: `Rowboat-linux`,
-                    bin: "rowboat",
-                    description: 'AI coworker with memory',
-                    homepage: 'https://rowboatlabs.com'
+                    name: `AutonomousMemory-linux`,
+                    bin: "autonomous-memory",
+                    description: 'Executive memory for CEOs, CROs, and founders. Never forget a conversation.',
+                    homepage: 'https://theautonomous.org/memory'
                 }
             }
         },
@@ -88,8 +88,8 @@ module.exports = {
             name: '@electron-forge/publisher-github',
             config: {
                 repository: {
-                    owner: 'rowboatlabs',
-                    name: 'rowboat'
+                    owner: 'theautonomousorg',
+                    name: 'autonomous-memory-desktop'
                 },
                 prerelease: true
             }

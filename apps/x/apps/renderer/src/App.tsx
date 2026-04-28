@@ -4747,14 +4747,14 @@ function App() {
           <DialogHeader>
             <DialogTitle>Screen recording permission required</DialogTitle>
             <DialogDescription>
-              Rowboat needs <strong>Screen Recording</strong> permission to capture meeting audio from other apps (Zoom, Meet, etc.). This feature won't work without it.
+              Autonomous Memory needs <strong>Screen Recording</strong> permission to capture meeting audio from other apps (Zoom, Meet, etc.). This feature won&apos;t work without it.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 text-sm text-muted-foreground">
             <p>To enable this:</p>
             <ol className="list-decimal list-inside space-y-1.5">
               <li>Open <strong>System Settings</strong> → <strong>Privacy & Security</strong> → <strong>Screen Recording</strong></li>
-              <li>Toggle on <strong>Rowboat</strong></li>
+              <li>Toggle on <strong>Autonomous Memory</strong></li>
               <li>You may need to restart the app after granting permission</li>
             </ol>
           </div>
