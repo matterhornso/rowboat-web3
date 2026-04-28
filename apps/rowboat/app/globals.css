@@ -172,3 +172,12 @@ body {
   outline: none !important;
   border-color: #d1d5db !important; /* Tailwind's gray-300 */
 }
+
+/* Hide scrollbars on horizontal nav strips — keeps momentum scroll */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
