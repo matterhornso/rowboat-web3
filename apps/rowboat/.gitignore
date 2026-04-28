@@ -40,3 +40,6 @@ chunked.jsonl
 crawled.jsonl
 embeddings.jsonl
 rewritten.jsonl
+
+# clerk configuration (can include secrets)
+/.clerk/
