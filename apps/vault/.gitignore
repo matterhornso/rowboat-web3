@@ -1,0 +1,20 @@
+node_modules/
+.next/
+out/
+.env*
+!.env.example
+
+# OS / editor cruft
+.DS_Store
+
+# Build artifacts
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# Test artifacts
+test-results/
+playwright-report/
+coverage/
+
+# Clerk local config (contains secrets)
+/.clerk/
